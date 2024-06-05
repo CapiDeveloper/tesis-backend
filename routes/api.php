@@ -9,14 +9,14 @@ use App\Http\Controllers\VerificacionController;
 use App\Http\Controllers\OlvidarClaveController;
 use App\Http\Controllers\RestablecerClaveController;
 
+Route::middleware(['auth:sanctum, verified'])->group(function(){
+    Route::get('/usuario', function (Request $request){
+        return $request->user();
+    });
+    Route::post('/cerrar-sesion', [AutenticacionController::class,'cerrarSesion']);
+});
 
-// Route::middleware(['auth:sanctum, verified'])->get('/user', function (Request $request) {
-//     // Route::get('/user', function (Request $request) {
-//     //     return $request->user();
-//     // });
-
-//     // Route::post('/cerrar-sesion', [AutenticacionController::class,'logout']);
-// });
+Route::post('/iniciar-sesion', [AutenticacionController::class,'iniciarSesion']);
 
 Route::post('/registrar-usuario', [UserController::class,'registro']);
 Route::post('/verificar-email/{token}', [VerificacionController::class, 'verificarEmail']);

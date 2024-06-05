@@ -12,13 +12,17 @@ class VerificacionController extends Controller
         $user = User::where('verification_token', $token)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'Invalid verification token.'], 400);
+            return [
+                'valido'=>false
+            ];
         }
 
         $user->email_verified_at = now();
         $user->verification_token = null; // Eliminar el token de verificación
         $user->save();
 
-        return response()->json(['message' => 'Email verified successfully.']);
+        return [
+            'valido'=>true
+        ];
     }
 }

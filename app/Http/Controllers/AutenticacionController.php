@@ -3,51 +3,34 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Http\Requests\RegistroUsuarioRequest;
+use App\Http\Requests\IniciarSesionRequest;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 
 class AutenticacionController extends Controller
 {
-    public function registro(RegistroUsuarioRequest $request){
-        
-        // $data = $request->validated();
+    public function iniciarSesion(IniciarSesionRequest $request){
+        $data = $request->validated();
+        // Revisar el password
+        if(!Auth::attempt($data)){
+            return response([
+                'errors'=>['El email o contraseña son incorrectos']
+            ],422);
+        }
 
+        // Autenticar el usuario
+        $user = Auth::user();
         return [
-            'user' => true
-        ];
-
-        // Crear el usuario
-        $user = User::create([
-            'name' => $data['name'],
-            'apellido' => $data['apellido'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'rol' => 1
-        ]);
-
-        return [
-            'user' => true
+            'token' => $user->createToken('token')->plainTextToken,
+            'user' => $user
         ];
     }
-    public function eliminar(Request $request){
-        
-        // $data = $request->validated();
-        echo 'Hola';
-        return;
+    public function cerrarSesion(Request $request){
+        $user = Auth::user();
+        $user->currentAccessToken()->delete();
 
-        // // Crear el usuario
-        // $user = User::create([
-        //     'name' => $data['name'],
-        //     'apellido' => $data['apellido'],
-        //     'email' => $data['email'],
-        //     'password' => bcrypt($data['password']),
-        //     'rol' => 1
-        // ]);
-
-        // return [
-        //     'user' => true
-        // ];
+        return response()->json(['message' => 'Sesión cerrada correctamente'], 200);
     }
 }

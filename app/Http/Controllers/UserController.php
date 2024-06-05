@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegistroUsuarioRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\VerificarCuentaMailable;
@@ -14,7 +13,6 @@ class UserController extends Controller
 {
     public function registro(RegistroUsuarioRequest $request)
     {
-        Log::info('Registro request: ', $request->all());
         
         $data = $request->validated();
 
