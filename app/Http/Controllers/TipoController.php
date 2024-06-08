@@ -44,7 +44,21 @@ class TipoController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $tipo = Tipo::findOrFail($id);
+        $tipo->nombre = $request->nombre;
+
+        $respuesta = $tipo->save();
+
+        if ($respuesta) {
+            return [
+                'valido' => true,
+                'tipo' => $tipo
+            ];
+        } else {
+            return [
+                'valido' => false
+            ];
+        }
     }
 
     public function destroy($id)

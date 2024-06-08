@@ -6,13 +6,17 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
     public function up()
     {
         Schema::create('lugar_turisticos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->text('descripción');
+            $table->text('descripcion');
             $table->string('direccion');
             $table->string('longitud');
             $table->string('latitud');
@@ -25,6 +29,11 @@ return new class extends Migration
         });
     }
 
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
     public function down()
     {
         Schema::dropIfExists('lugar_turisticos');

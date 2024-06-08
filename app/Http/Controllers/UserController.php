@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\VerificarCuentaMailable;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -35,6 +36,13 @@ class UserController extends Controller
 
         return [
             'user' => true
+        ];
+    }
+    public function obtenerLugares(){
+        $usuarios = User::all();
+        return [
+            'valido'=>true,
+            'usuarios'=> UserResource::collection($usuarios)
         ];
     }
 }

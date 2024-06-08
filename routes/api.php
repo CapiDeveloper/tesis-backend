@@ -9,16 +9,20 @@ use App\Http\Controllers\VerificacionController;
 use App\Http\Controllers\OlvidarClaveController;
 use App\Http\Controllers\RestablecerClaveController;
 use App\Http\Controllers\TipoController;
-
+use App\Http\Controllers\LugarTuristicoController;
 
 Route::middleware(['auth:sanctum, verified'])->group(function(){
     Route::get('/usuario', function (Request $request){
         return $request->user();
     });
     Route::post('/cerrar-sesion', [AutenticacionController::class,'cerrarSesion']);
-    
+    Route::get('/obtener-usuarios', [UserController::class,'obtenerLugares']);
+
     //  CRUD Tipo de lugar turistico
     Route::apiResource('/tipo-lugar', TipoController::class);
+
+    //  CRUD Lugar Turistico
+    Route::apiResource('/lugar-turistico', LugarTuristicoController::class);
 
 });
 
