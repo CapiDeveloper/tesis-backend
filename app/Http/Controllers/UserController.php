@@ -50,17 +50,34 @@ class UserController extends Controller
 
     public function subirImagenPerfil(Request $request){
 
-        // $ruta = ImageService::procesarYGuardar($_FILES['image']['tmp_name']);
+        $user = User::findOrFail($request->user()->id);
+        // Eliminar imágenes anteriores si existen
+        if ($user->imagen) {
+            $this->eliminarImagenesAnteriores($user->imagen);
+        }
+
         $imagenTemporal = $_FILES['image']['tmp_name'];
         $nombreOriginal = $_FILES['image']['name'];
 
         // Procesar y guardar la imagen
-        $ruta = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal);
+        $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,120,120);
 
-        // Guardar imagen
+        $user->imagen = $nombreImg;
+        $user->save();
 
         return [
-            'imagen'=>$ruta
+            'imagen'=>$nombreImg
         ];
     }
+    private function eliminarImagenesAnteriores($nombreImagen)
+{
+    $extensiones = ['webp', 'avif'];
+
+    foreach ($extensiones as $ext) {
+        $ruta = public_path('imagenes/') . pathinfo($nombreImagen, PATHINFO_FILENAME) . '.' . $ext;
+        if (file_exists($ruta)) {
+            unlink($ruta);
+        }
+    }
+}
 }

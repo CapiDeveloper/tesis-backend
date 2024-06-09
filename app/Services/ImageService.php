@@ -11,13 +11,21 @@ use Intervention\Image\Encoders\AvifEncoder;
 
 class ImageService
 {
-    public static function procesarYGuardar($imagenTemporal, $nombreOriginal)
+    public static function procesarYGuardar($imagenTemporal, $nombreOriginal, $ancho = null, $alto = null)
     {
         // Crear una instancia de ImageManager
         $manager = new ImageManager(Driver::class);
 
         // Leer la imagen utilizando ImageManager
         $imagen = $manager->read($imagenTemporal);
+
+        // Redimensionar la imagen si se especifican dimensiones
+        if ($ancho && $alto) {
+            $imagen->resize($ancho, $alto, function ($constraint) {
+                $constraint->aspectRatio(); // Mantener la relación de aspecto
+                $constraint->upsize(); // Prevenir que la imagen se amplíe
+            });
+        }
 
         // Obtener la extensión del archivo original
         $extension = pathinfo($nombreOriginal, PATHINFO_EXTENSION);

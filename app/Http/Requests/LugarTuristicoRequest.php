@@ -16,22 +16,17 @@ class LugarTuristicoRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
         return [
-            'nombre' => ['required'],
-            'descripcion' => ['required'],
-            'direccion' => ['required'],
-            'latitud' => ['required'],
-            'longitud' => ['required'],
-            'contacto' => ['required'],
-            'user_id' => ['required'],
-            'tipo_id' => ['required'],
+            'nombre' => 'required',
+            'descripcion' => 'required',
+            'direccion' => 'required',
+            'latitud' => 'required',
+            'longitud' => 'required',
+            'contacto' => 'required',
+            'user_id' => 'required',
+            'tipo_id' => 'required',
         ];
     }
     public function messages(){
