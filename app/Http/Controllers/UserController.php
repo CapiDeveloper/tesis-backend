@@ -70,14 +70,14 @@ class UserController extends Controller
         ];
     }
     private function eliminarImagenesAnteriores($nombreImagen)
-{
-    $extensiones = ['webp', 'avif'];
+    {
+        $extensiones = ['webp', 'avif'];
 
-    foreach ($extensiones as $ext) {
-        $ruta = public_path('imagenes/') . pathinfo($nombreImagen, PATHINFO_FILENAME) . '.' . $ext;
-        if (file_exists($ruta)) {
-            unlink($ruta);
+        foreach ($extensiones as $ext) {
+            $ruta = public_path('imagenes/') . pathinfo($nombreImagen, PATHINFO_FILENAME) . '.' . $ext;
+            if (file_exists($ruta)) {
+                unlink($ruta);
+            }
         }
     }
-}
 }

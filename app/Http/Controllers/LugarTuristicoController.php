@@ -52,16 +52,65 @@ class LugarTuristicoController extends Controller
 
     public function show($id)
     {
-        //
+         // Buscar el lugar turístico por su ID
+        $lugarTuristico = LugarTuristico::findOrFail($id);
+
+        // Devolver la información del lugar turístico
+        return [
+            'valido' => true,
+            'lugarTuristico' => $lugarTuristico
+        ];
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $lugar = LugarTuristico::findOrFail($id);
+        // Falta actualizar informacion y guardar y listi
+
+        $respuesta = $lugar->save();
+
+        if ($respuesta) {
+            return [
+                'valido' => true,
+                'lugar' => $lugar
+            ];
+        } else {
+            return [
+                'valido' => false
+            ];
+        }
     }
 
     public function destroy($id)
     {
-        //
+        $tipo = LugarTuristico::findOrFail($id);
+        
+        // eliminar imagenes
+        if($tipo->logo){
+            $this->eliminarImagenesAnteriores($tipo->logo);
+        }
+        // Eliminar lugar turistico
+        $eliminado = $tipo->delete();
+
+        
+        if($eliminado){
+            return [
+                'valido'=>$id
+            ];
+        }
+        return [
+            'valido'=>false
+        ];
+    }
+    private function eliminarImagenesAnteriores($nombreImagen)
+    {
+        $extensiones = ['webp', 'avif'];
+
+        foreach ($extensiones as $ext) {
+            $ruta = public_path('imagenes/') . pathinfo($nombreImagen, PATHINFO_FILENAME) . '.' . $ext;
+            if (file_exists($ruta)) {
+                unlink($ruta);
+            }
+        }
     }
 }
