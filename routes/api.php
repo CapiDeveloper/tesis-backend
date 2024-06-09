@@ -21,8 +21,12 @@ Route::middleware(['auth:sanctum, verified'])->group(function(){
     //  CRUD Tipo de lugar turistico
     Route::apiResource('/tipo-lugar', TipoController::class);
 
-    //  CRUD Lugar Turistico
+    //  CRUD Lugar Turistico (pendiente)
     Route::apiResource('/lugar-turistico', LugarTuristicoController::class);
+
+    // Subir imagen perfil
+    Route::post('/subir-imagen-perfil', [UserController::class,'subirImagenPerfil']);
+
 
 });
 

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\VerificarCuentaMailable;
 use App\Http\Resources\UserResource;
+use App\Services\ImageService;
+use Illuminate\Http\UploadedFile;
 
 class UserController extends Controller
 {
@@ -43,6 +45,22 @@ class UserController extends Controller
         return [
             'valido'=>true,
             'usuarios'=> UserResource::collection($usuarios)
+        ];
+    }
+
+    public function subirImagenPerfil(Request $request){
+
+        // $ruta = ImageService::procesarYGuardar($_FILES['image']['tmp_name']);
+        $imagenTemporal = $_FILES['image']['tmp_name'];
+        $nombreOriginal = $_FILES['image']['name'];
+
+        // Procesar y guardar la imagen
+        $ruta = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal);
+
+        // Guardar imagen
+
+        return [
+            'imagen'=>$ruta
         ];
     }
 }

@@ -30,7 +30,6 @@ class LugarTuristicoRequest extends FormRequest
             'latitud' => ['required'],
             'longitud' => ['required'],
             'contacto' => ['required'],
-            'logo' => ['required'],
             'user_id' => ['required'],
             'tipo_id' => ['required'],
         ];
@@ -43,7 +42,6 @@ class LugarTuristicoRequest extends FormRequest
             'latitud' => 'La latitud es obligatorio',
             'longitud' => 'La longitud es obligatorio',
             'contacto' => 'El contacto es obligatorio',
-            'logo' => 'El logo es obligatorio',
             'user_id' => 'El usuario es obligatorio',
             'tipo_id' => 'El tipo es obligatorio',
         ];
