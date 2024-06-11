@@ -40,7 +40,7 @@ class FotoController extends Controller
             $nombreOriginal = $_FILES['imagen']['name'];
 
              // Procesar y guardar la imagen
-            $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,120,120);
+            $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,500,300);
 
             $foto = Foto::create([
                 'url' => $nombreImg,
