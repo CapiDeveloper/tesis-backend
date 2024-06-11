@@ -10,23 +10,29 @@ use App\Http\Controllers\OlvidarClaveController;
 use App\Http\Controllers\RestablecerClaveController;
 use App\Http\Controllers\TipoController;
 use App\Http\Controllers\LugarTuristicoController;
+use App\Http\Controllers\LogoImagenController;
+use App\Http\Controllers\FotoController;
 
 Route::middleware(['auth:sanctum, verified'])->group(function(){
+    
+    // Usuarios
     Route::get('/usuario', function (Request $request){
         return $request->user();
     });
     Route::post('/cerrar-sesion', [AutenticacionController::class,'cerrarSesion']);
     Route::get('/obtener-usuarios', [UserController::class,'obtenerLugares']);
+    // Subir imagen perfil
+    Route::post('/subir-imagen-perfil', [UserController::class,'subirImagenPerfil']);
 
     //  CRUD Tipo de lugar turistico
     Route::apiResource('/tipo-lugar', TipoController::class);
 
     //  CRUD Lugar Turistico (pendiente)
     Route::apiResource('/lugar-turistico', LugarTuristicoController::class);
+    Route::post('/actualizar-imagen-logo', [LogoImagenController::class,'actualizarLogo']);
 
-    // Subir imagen perfil
-    Route::post('/subir-imagen-perfil', [UserController::class,'subirImagenPerfil']);
-
+    // CRUD imagenes
+    Route::apiResource('/imagenes-lugar-turistico', FotoController::class);
 
 });
 

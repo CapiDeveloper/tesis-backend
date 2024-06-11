@@ -69,6 +69,7 @@ class UserController extends Controller
             'imagen'=>$nombreImg
         ];
     }
+
     private function eliminarImagenesAnteriores($nombreImagen)
     {
         $extensiones = ['webp', 'avif'];

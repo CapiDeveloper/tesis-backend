@@ -28,7 +28,7 @@ class LugarTuristicoController extends Controller
         $nombreOriginal = $_FILES['logo']['name'];
 
         // Procesar y guardar la imagen
-        $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,350,200);
+        $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,200,200);
     
 
         $lugar = LugarTuristico::create([
@@ -62,23 +62,16 @@ class LugarTuristicoController extends Controller
         ];
     }
 
-    public function update(Request $request, $id)
+    public function update(LugarTuristicoRequest $request, $id)
     {
-        $lugar = LugarTuristico::findOrFail($id);
-        // Falta actualizar informacion y guardar y listi
+        $data = $request->validated();
+        $lugarTuristico = LugarTuristico::findOrFail($id);
 
-        $respuesta = $lugar->save();
+        $lugarTuristico->update($data);
 
-        if ($respuesta) {
-            return [
-                'valido' => true,
-                'lugar' => $lugar
-            ];
-        } else {
-            return [
-                'valido' => false
-            ];
-        }
+        return [
+            'valido' => true,
+        ];
     }
 
     public function destroy($id)
