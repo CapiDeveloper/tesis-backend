@@ -13,6 +13,7 @@ use App\Http\Controllers\LugarTuristicoController;
 use App\Http\Controllers\LogoImagenController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\ServicioController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -35,8 +36,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     // CRUD imagenes
     Route::apiResource('/imagenes-lugar-turistico', FotoController::class);
 
-    // CRUD imagenes
+    // CRUD Horarios
     Route::apiResource('/horario-lugar-turistico', HorarioController::class);
+
+    // CRUD Servicios
+    Route::apiResource('/servicio-lugar-turistico', ServicioController::class);
     
 });
 
