@@ -12,8 +12,9 @@ use App\Http\Controllers\TipoController;
 use App\Http\Controllers\LugarTuristicoController;
 use App\Http\Controllers\LogoImagenController;
 use App\Http\Controllers\FotoController;
+use App\Http\Controllers\HorarioController;
 
-Route::middleware(['auth:sanctum, verified'])->group(function(){
+Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
     // Usuarios
     Route::get('/usuario', function (Request $request){
@@ -34,6 +35,9 @@ Route::middleware(['auth:sanctum, verified'])->group(function(){
     // CRUD imagenes
     Route::apiResource('/imagenes-lugar-turistico', FotoController::class);
 
+    // CRUD imagenes
+    Route::apiResource('/horario-lugar-turistico', HorarioController::class);
+    
 });
 
 // Control de cuentas

@@ -53,8 +53,7 @@ class FotoController extends Controller
             ];
         }
         return [
-            'valido'=>$autenticado,
-            'valido2'=>$emprendedor,
+            'valido' => false
 
         ];
         
