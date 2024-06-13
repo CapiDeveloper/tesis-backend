@@ -10,9 +10,14 @@ use App\Models\Oferta;
 class OfertaController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $horarios = Oferta::where('lugar_turistico_id',$request->id)->get();
+
+        return [
+            'valido'=>true,
+            'ofertas'=> $horarios
+        ];
     }
 
     public function store(OfertaRequest $request)
@@ -46,13 +51,37 @@ class OfertaController extends Controller
 
     }
 
-    public function update(Request $request, $id)
+    public function update(OfertaRequest $request, $id)
     {
-        //
+        $data = $request->validated();
+        $oferta = Oferta::findOrFail($id);
+
+        $respuesta =  $oferta->update($data);
+
+        if ($respuesta) {
+            return [
+                'valido' => true,
+                'oferta' => $oferta
+            ];
+        } else {
+            return [
+                'valido' => false
+            ];
+        }
     }
 
     public function destroy($id)
     {
-        //
+        $oferta = Oferta::findOrFail($id);
+        $eliminado = $oferta->delete();
+        
+        if($eliminado){
+            return [
+                'valido'=>$oferta->id
+            ];
+        }
+        return [
+            'valido'=>false
+        ];
     }
 }
