@@ -14,6 +14,7 @@ use App\Http\Controllers\LogoImagenController;
 use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\ServicioController;
+use App\Http\Controllers\OfertaController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -41,6 +42,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     // CRUD Servicios
     Route::apiResource('/servicio-lugar-turistico', ServicioController::class);
+
+    // CRUD Ofertas
+    Route::apiResource('/oferta-lugar-turistico', OfertaController::class);
     
 });
 
