@@ -15,6 +15,7 @@ use App\Http\Controllers\FotoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\OfertaController;
+use App\Http\Controllers\CategoriaController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -30,7 +31,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     //  CRUD Tipo de lugar turistico
     Route::apiResource('/tipo-lugar', TipoController::class);
 
-    //  CRUD Lugar Turistico (pendiente)
+    //  CRUD Lugar Turistico (pendiente - editar usuario)
     Route::apiResource('/lugar-turistico', LugarTuristicoController::class);
     Route::post('/actualizar-imagen-logo', [LogoImagenController::class,'actualizarLogo']);
 
@@ -45,6 +46,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     // CRUD Ofertas
     Route::apiResource('/oferta-lugar-turistico', OfertaController::class);
+
+    // CRUD Categoria productos
+    Route::apiResource('/categoria-lugar-turistico', CategoriaController::class);
     
 });
 

@@ -12,17 +12,27 @@ class LugarTuristicoController extends Controller
 
     public function index()
     {
-        $lugaresTuristicos = LugarTuristico::all();
+
+        $user = Auth::user();
+
+        if($user->rol == 0){
+            $lugaresTuristicos = LugarTuristico::all();
         
-        return [
-            'valido'=>true,
-            'lugaresTuristicos'=> $lugaresTuristicos
-        ];
+            return [
+                'valido'=>true,
+                'lugaresTuristicos'=> $lugaresTuristicos
+            ];
+        }else{
+            return [
+                'valido'=>true,
+            ];    
+        }
     }
 
     public function store(LugarTuristicoRequest $request)
 {
-
+    $user = Auth::user();
+    if($user->rol == 0){
         $data = $request->validated();
         $imagenTemporal = $_FILES['logo']['tmp_name'];
         $nombreOriginal = $_FILES['logo']['name'];
@@ -48,53 +58,80 @@ class LugarTuristicoController extends Controller
         'valido'=> true,
         'image'=>$lugar
     ];
+    }else{
+        return [
+            'valido'=>true,
+        ];    
+    }
 }
 
     public function show($id)
     {
-         // Buscar el lugar turístico por su ID
-        $lugarTuristico = LugarTuristico::findOrFail($id);
 
-        // Devolver la información del lugar turístico
-        return [
-            'valido' => true,
-            'lugarTuristico' => $lugarTuristico
-        ];
+        $user = Auth::user();
+        if($user->rol == 0){
+            $lugarTuristico = LugarTuristico::findOrFail($id);
+
+            return [
+                'valido' => true,
+                'lugarTuristico' => $lugarTuristico
+            ];
+        }else{
+            return [
+                'valido'=>true,
+            ];    
+        }
     }
 
     public function update(LugarTuristicoRequest $request, $id)
     {
-        $data = $request->validated();
-        $lugarTuristico = LugarTuristico::findOrFail($id);
 
-        $lugarTuristico->update($data);
+        $user = Auth::user();
+        if($user->rol == 0){
+            $data = $request->validated();
+            $lugarTuristico = LugarTuristico::findOrFail($id);
 
-        return [
-            'valido' => true,
-        ];
+            $lugarTuristico->update($data);
+
+            return [
+                'valido' => true,
+            ];
+        }else{
+            return [
+                'valido'=>true,
+            ];    
+        }
     }
 
     public function destroy($id)
     {
-        $tipo = LugarTuristico::findOrFail($id);
-        
-        // eliminar imagenes
-        if($tipo->logo){
-            $this->eliminarImagenesAnteriores($tipo->logo);
-        }
-        // Eliminar lugar turistico
-        $eliminado = $tipo->delete();
 
-        
-        if($eliminado){
+        $user = Auth::user();
+        if($user->rol == 0){
+            $tipo = LugarTuristico::findOrFail($id);
+            // eliminar imagenes
+            if($tipo->logo){
+                $this->eliminarImagenesAnteriores($tipo->logo);
+            }
+            // Eliminar lugar turistico
+            $eliminado = $tipo->delete();
+
+            
+            if($eliminado){
+                return [
+                    'valido'=>$id
+                ];
+            }
             return [
-                'valido'=>$id
+                'valido'=>false
             ];
+        }else{
+            return [
+                'valido'=>true,
+            ];    
         }
-        return [
-            'valido'=>false
-        ];
     }
+
     private function eliminarImagenesAnteriores($nombreImagen)
     {
         $extensiones = ['webp', 'avif'];

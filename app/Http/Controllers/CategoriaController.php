@@ -3,72 +3,70 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tipo;
+use App\Http\Requests\CategoriaRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Categoria;
 
-class TipoController extends Controller
+class CategoriaController extends Controller
 {
 
     public function index()
     {
-
         $user = Auth::user();
 
         if($user->rol == 0){
-            $tipos = Tipo::all();
-            return [
-                'tipos'=>$tipos
-            ];
-        }else{
-            return [
-                'valido'=>false
-            ]; 
-        }
-    }
-
-    public function store(Request $request)
-    {
-
-        $user = Auth::user();
-
-        if($user->rol == 0){
-            $tipo = new Tipo;
-            $tipo->nombre = $request->nombre;
+            $categorias = Categoria::all();
             
-            $respuesta = $tipo->save();
-
-            if($respuesta){
-
-                $tipo = Tipo::findOrFail($tipo->id);
-                return [
-                    'valido'=>true,
-                    'tipo'=>$tipo
-                ];
-            }else{
-                return [
-                    'valido'=>false
-                ];
-            }
+            return [
+                'valido' => true,
+                'categorias'=> $categorias
+            ];
         }else{
             return [
-                'valido'=>false
+                'valido' => false
             ];
         }
     }
 
-    public function update(Request $request, $id)
+    public function store(CategoriaRequest $request)
+    {
+
+        $user = Auth::user();
+
+        if($user->rol == 0){
+            $data = $request->validated();
+        
+            $categoria = Categoria::create([
+                'nombre' => $data['nombre']
+            ]);
+
+            return [
+                'valido' => true,
+                'categoria'=> $categoria
+            ];
+        }else{
+            return [
+                'valido' => false
+            ];
+        }
+
+    }
+
+    public function update(CategoriaRequest $request, $id)
     {
         $user = Auth::user();
 
         if($user->rol == 0){
-            $tipo = Tipo::findOrFail($id);
-            $tipo->nombre = $request->nombre;
 
-            $respuesta = $tipo->save();
+            $data = $request->validated();
+            $categoria = Categoria::findOrFail($id);
+
+            $respuesta = $categoria->update($data);
 
             if ($respuesta) {
                 return [
                     'valido' => true,
-                    'tipo' => $tipo
+                    'categoria' => $categoria
                 ];
             } else {
                 return [
@@ -77,19 +75,20 @@ class TipoController extends Controller
             }
         }else{
             return [
-                'valido' => false
+                'valido'=>false
             ];
         }
     }
 
     public function destroy($id)
     {
+        
         $user = Auth::user();
 
         if($user->rol == 0){
-            $tipo = Tipo::findOrFail($id);
-            $eliminado = $tipo->delete();
-            
+            $categoria = Categoria::findOrFail($id);
+            $eliminado = $categoria->delete();
+
             if($eliminado){
                 return [
                     'valido'=>$id
