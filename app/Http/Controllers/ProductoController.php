@@ -51,7 +51,7 @@ class ProductoController extends Controller
                 if($producto){
                     return [
                         'valido'=> true,
-                        'image'=>$producto
+                        'producto'=>$producto
                     ];
                 }else{
                         return [
@@ -97,6 +97,11 @@ class ProductoController extends Controller
     public function destroy($id)
     {
         $producto = Producto::findOrFail($id);
+
+        if($producto->imagen){
+            $this->eliminarImagenesAnteriores($producto->imagen);
+        }
+
         $eliminado = $producto->delete();
         
         if($eliminado){
@@ -107,5 +112,17 @@ class ProductoController extends Controller
         return [
             'valido'=>false
         ];
+    }
+
+    private function eliminarImagenesAnteriores($nombreImagen)
+    {
+        $extensiones = ['webp', 'avif'];
+
+        foreach ($extensiones as $ext) {
+            $ruta = public_path('imagenes/') . pathinfo($nombreImagen, PATHINFO_FILENAME) . '.' . $ext;
+            if (file_exists($ruta)) {
+                unlink($ruta);
+            }
+        }
     }
 }
