@@ -16,6 +16,7 @@ use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\OfertaController;
 use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\ProductoController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -49,6 +50,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     // CRUD Categoria productos
     Route::apiResource('/categoria-lugar-turistico', CategoriaController::class);
+
+    // CRUD Productos
+    Route::apiResource('/producto-lugar-turistico', ProductoController::class);
     
 });
 

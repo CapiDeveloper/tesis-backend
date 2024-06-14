@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LugarTuristicoRequest;
 use App\Models\LugarTuristico;
 use App\Services\ImageService;
+use Illuminate\Support\Facades\Auth;
 
 class LugarTuristicoController extends Controller
 {
@@ -32,6 +33,7 @@ class LugarTuristicoController extends Controller
     public function store(LugarTuristicoRequest $request)
 {
     $user = Auth::user();
+    
     if($user->rol == 0){
         $data = $request->validated();
         $imagenTemporal = $_FILES['logo']['tmp_name'];
@@ -54,10 +56,10 @@ class LugarTuristicoController extends Controller
             'tipo_id' => $data['tipo_id'],
         ]);
 
-    return [
-        'valido'=> true,
-        'image'=>$lugar
-    ];
+        return [
+            'valido'=> true,
+            'image'=>$lugar
+        ];
     }else{
         return [
             'valido'=>true,
