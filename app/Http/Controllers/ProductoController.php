@@ -48,10 +48,12 @@ class ProductoController extends Controller
                 'categoria_id' => $request->categoria_id,
             ]);
 
-                if($producto){
+            $productoRetornar = Producto::with('categoria')->findOrFail($producto->id);
+
+                if($productoRetornar->id){
                     return [
                         'valido'=> true,
-                        'producto'=>$producto
+                        'producto'=>$productoRetornar
                     ];
                 }else{
                         return [

@@ -17,6 +17,7 @@ use App\Http\Controllers\ServicioController;
 use App\Http\Controllers\OfertaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
+use App\Http\Controllers\ProductoImagenController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -53,6 +54,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     // CRUD Productos
     Route::apiResource('/producto-lugar-turistico', ProductoController::class);
+    Route::post('/actualizar-imagen-producto', [ProductoImagenController::class,'actualizarimagen']);
+
     
 });
 

@@ -3,33 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\LugarTuristico;
+use App\Models\Producto;
 use App\Services\ImageService;
 
-class LogoImagenController extends Controller
+class ProductoImagenController extends Controller
 {
-    public function actualizarLogo(Request $request) {
 
+    public function actualizarimagen(Request $request) {
 
-        $imagenTemporal = $_FILES['logo']['tmp_name'];
-        $nombreOriginal = $_FILES['logo']['name'];
+        $imagenTemporal = $_FILES['imagen']['tmp_name'];
+        $nombreOriginal = $_FILES['imagen']['name'];
 
-        $lugarTuristico = LugarTuristico::findOrFail($_POST['id']);
+        $producto = Producto::findOrFail($_POST['id']);
+        
         $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,200,200);
         
-        if($lugarTuristico->logo){
-            $this->eliminarImagenesAnteriores($lugarTuristico->logo);
+        if($producto->imagen){
+            $this->eliminarImagenesAnteriores($producto->imagen);
         }
 
-        $lugarTuristico->logo = $nombreImg;
-        $lugarTuristico->update();
+        $producto->imagen = $nombreImg;
+        $producto->update();
+
+        $productoRetornar = Producto::with('categoria')->findOrFail($producto->id);
 
         return [
             'valido'=>true,
-            'imagen'=>$nombreImg
+            'producto'=>$productoRetornar
         ];
     }
-    
+
     private function eliminarImagenesAnteriores($nombreImagen)
     {
         $extensiones = ['webp', 'avif'];
