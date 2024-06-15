@@ -11,6 +11,7 @@ use App\Mail\VerificarCuentaMailable;
 use App\Http\Resources\UserResource;
 use App\Services\ImageService;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -40,6 +41,37 @@ class UserController extends Controller
             'user' => true
         ];
     }
+
+    public function actualizar(Request $request){
+        $autenticado = Auth::user();
+
+        if($autenticado->id == $request->id){
+            $usuario = User::findOrFail($request->id);
+            
+            $usuario->nombre = $request->nombre;
+            $usuario->apellido = $request->apellido;
+
+            $guardar =  $usuario->save();
+
+            if($guardar){
+                return [
+                    'usuario' => $usuario,
+                    'valido' => true
+                ];    
+            }else{
+                return [
+                    'valido' => false
+                ];    
+            }
+
+        }else{
+            return [
+                'valido' => false
+            ];
+        }
+
+    }
+
     public function obtenerLugares(){
         $usuarios = User::all();
         return [

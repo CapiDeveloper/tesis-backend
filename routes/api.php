@@ -27,6 +27,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     });
     Route::post('/cerrar-sesion', [AutenticacionController::class,'cerrarSesion']);
     Route::get('/obtener-usuarios', [UserController::class,'obtenerLugares']);
+    Route::post('/actualizar-usuario', [UserController::class,'actualizar']);
+
     // Subir imagen perfil
     Route::post('/subir-imagen-perfil', [UserController::class,'subirImagenPerfil']);
 
