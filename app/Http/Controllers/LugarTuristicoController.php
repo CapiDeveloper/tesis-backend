@@ -16,17 +16,33 @@ class LugarTuristicoController extends Controller
 
         $user = Auth::user();
 
-        if($user->rol == 0){
-            $lugaresTuristicos = LugarTuristico::all();
-        
-            return [
-                'valido'=>true,
-                'lugaresTuristicos'=> $lugaresTuristicos
-            ];
+        if($user){
+            if($user->rol == 0){
+                
+                $lugaresTuristicos = LugarTuristico::all();
+            
+                return [
+                    'valido'=>true,
+                    'lugaresTuristicos'=> $lugaresTuristicos
+                ];
+            }else if($user->rol == 1){
+
+                $lugares = LugarTuristico::where('user_id',$user->id)->get();
+                if($lugares){
+                    return [
+                        'valido'=>true,
+                        'lugaresTuristicos'=> $lugares
+                    ];    
+                }else{
+                    return [
+                        'valido'=>false
+                    ];    
+                }
+            }
         }else{
             return [
-                'valido'=>true,
-            ];    
+                'valido'=>false,
+            ]; 
         }
     }
 
@@ -34,7 +50,7 @@ class LugarTuristicoController extends Controller
 {
     $user = Auth::user();
     
-    if($user->rol == 0){
+    if($user->rol == 0 || $user->rol == 1){
         $data = $request->validated();
         $imagenTemporal = $_FILES['logo']['tmp_name'];
         $nombreOriginal = $_FILES['logo']['name'];
@@ -62,7 +78,7 @@ class LugarTuristicoController extends Controller
         ];
     }else{
         return [
-            'valido'=>true,
+            'valido'=>false,
         ];    
     }
 }
@@ -71,7 +87,7 @@ class LugarTuristicoController extends Controller
     {
 
         $user = Auth::user();
-        if($user->rol == 0){
+        if($user->rol == 0 || $user->rol == 1){
             $lugarTuristico = LugarTuristico::findOrFail($id);
 
             return [

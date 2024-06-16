@@ -24,25 +24,15 @@ class AutenticacionController extends Controller
         // Autenticar el usuario
         $user = Auth::user();
 
-        if($user->rol == 1){
-            $lugar = LugarTuristico::where('user_id',$user->id)->get();
-            
-            if($lugar){
-                return [
-                    'token' => $user->createToken('token')->plainTextToken,
-                    'lugar' => $lugar,
-                    'user' => $user
-                ];
-            }else{
-                return [
-                    'token' => $user->createToken('token')->plainTextToken,
-                    'user' => $user
-                ];
-            }
-        }else{
+        if($user){
             return [
+                'valido' => true,
                 'token' => $user->createToken('token')->plainTextToken,
                 'user' => $user
+            ];
+        }else{
+            return [
+                'valido' => false
             ];
         }
     }

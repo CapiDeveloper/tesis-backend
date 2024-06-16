@@ -14,9 +14,10 @@ class TipoController extends Controller
 
         $user = Auth::user();
 
-        if($user->rol == 0){
+        if($user->rol == 0 || $user->rol == 1){
             $tipos = Tipo::all();
             return [
+                'valido'=>true,
                 'tipos'=>$tipos
             ];
         }else{

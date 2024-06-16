@@ -18,6 +18,7 @@ use App\Http\Controllers\OfertaController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProductoImagenController;
+use App\Http\Controllers\DisponibilidadProductoController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -26,7 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
         return $request->user();
     });
     Route::post('/cerrar-sesion', [AutenticacionController::class,'cerrarSesion']);
-    Route::get('/obtener-usuarios', [UserController::class,'obtenerLugares']);
+    Route::get('/obtener-usuarios', [UserController::class,'obtenerUsuarios']);
     Route::post('/actualizar-usuario', [UserController::class,'actualizar']);
 
     // Subir imagen perfil
@@ -57,7 +58,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     // CRUD Productos
     Route::apiResource('/producto-lugar-turistico', ProductoController::class);
     Route::post('/actualizar-imagen-producto', [ProductoImagenController::class,'actualizarimagen']);
-
+    Route::post('/actualizar-disponibilidad-producto', [DisponibilidadProductoController::class,'actualizarDisponibilidad']);
     
 });
 

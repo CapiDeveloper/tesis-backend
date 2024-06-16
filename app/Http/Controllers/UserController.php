@@ -72,7 +72,7 @@ class UserController extends Controller
 
     }
 
-    public function obtenerLugares(){
+    public function obtenerUsuarios(){
         $usuarios = User::all();
         return [
             'valido'=>true,
