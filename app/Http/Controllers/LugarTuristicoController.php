@@ -61,6 +61,7 @@ class LugarTuristicoController extends Controller
 
         $lugar = LugarTuristico::create([
             'nombre' => $data['nombre'],
+            'url' => LugarTuristico::generateUrl($data['nombre']),
             'descripcion' => $data['descripcion'],
             'direccion' => $data['direccion'],
             'longitud' => $data['longitud'],
@@ -87,16 +88,24 @@ class LugarTuristicoController extends Controller
     {
 
         $user = Auth::user();
-        if($user->rol == 0 || $user->rol == 1){
-            $lugarTuristico = LugarTuristico::findOrFail($id);
+        $lugarTuristico = LugarTuristico::findOrFail($id);
 
-            return [
-                'valido' => true,
-                'lugarTuristico' => $lugarTuristico
-            ];
+
+        if($user->rol == 0 || $user->rol == 1){
+
+            if($lugarTuristico->user_id == $user->id || $user->rol == 0){
+                return [
+                    'valido' => true,
+                    'lugarTuristico' => $lugarTuristico
+                ];
+            }else{
+                return [
+                    'valido' => false
+                ];
+            }
         }else{
             return [
-                'valido'=>true,
+                'valido'=>false,
             ];    
         }
     }
@@ -108,7 +117,7 @@ class LugarTuristicoController extends Controller
         if($user->rol == 0){
             $data = $request->validated();
             $lugarTuristico = LugarTuristico::findOrFail($id);
-
+            $lugarTuristico->url = LugarTuristico::generateUrl($data['nombre']);
             $lugarTuristico->update($data);
 
             return [
