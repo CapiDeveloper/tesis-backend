@@ -19,6 +19,7 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProductoImagenController;
 use App\Http\Controllers\DisponibilidadProductoController;
+use App\Http\Controllers\InformacionLugarController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -68,3 +69,7 @@ Route::post('/registrar-usuario', [UserController::class,'registro']);
 Route::post('/verificar-email/{token}', [VerificacionController::class, 'verificarEmail']);
 Route::post('/olvidar-clave', [OlvidarClaveController::class, 'enviarEmail']);
 Route::post('/restablecer-clave', [RestablecerClaveController::class, 'restablecer']);
+
+Route::get('/info-lugar', [InformacionLugarController::class, 'obtenerLugar']);
+Route::get('/info-horario', [InformacionLugarController::class, 'obtenerHorario']);
+Route::get('/info-producto', [InformacionLugarController::class, 'obtenerProducto']);
