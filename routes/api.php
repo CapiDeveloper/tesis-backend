@@ -73,3 +73,5 @@ Route::post('/restablecer-clave', [RestablecerClaveController::class, 'restablec
 Route::get('/info-lugar', [InformacionLugarController::class, 'obtenerLugar']);
 Route::get('/info-horario', [InformacionLugarController::class, 'obtenerHorario']);
 Route::get('/info-producto', [InformacionLugarController::class, 'obtenerProducto']);
+Route::get('/info-imagen', [InformacionLugarController::class, 'obtenerImagen']);
+Route::get('/info-servicio', [InformacionLugarController::class, 'obtenerServicio']);

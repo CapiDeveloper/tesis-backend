@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\Tipo;
 
 class LugarTuristico extends Model
 {
@@ -52,5 +53,10 @@ class LugarTuristico extends Model
         }
 
         return $url;
+    }
+
+    public function tipo()
+    {
+        return $this->belongsTo(Tipo::class, 'tipo_id');
     }
 }
