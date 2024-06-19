@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Models\Tipo;
+use App\Models\Foto;
 
 class LugarTuristico extends Model
 {
@@ -59,4 +60,10 @@ class LugarTuristico extends Model
     {
         return $this->belongsTo(Tipo::class, 'tipo_id');
     }
+
+    public function fotos()
+    {
+        return $this->hasMany(Foto::class);
+    }
+
 }

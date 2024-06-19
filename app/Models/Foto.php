@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\LugarTuristico;
 
 class Foto extends Model
 {
@@ -13,4 +14,10 @@ class Foto extends Model
         'url',
         'lugar_turistico_id',
     ];
+
+    public function lugarTuristico()
+    {
+        return $this->belongsTo(LugarTuristico::class);
+    }
+
 }
