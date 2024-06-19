@@ -20,6 +20,8 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProductoImagenController;
 use App\Http\Controllers\DisponibilidadProductoController;
 use App\Http\Controllers\InformacionLugarController;
+use App\Http\Controllers\ComentarioController;
+
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -60,6 +62,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::apiResource('/producto-lugar-turistico', ProductoController::class);
     Route::post('/actualizar-imagen-producto', [ProductoImagenController::class,'actualizarimagen']);
     Route::post('/actualizar-disponibilidad-producto', [DisponibilidadProductoController::class,'actualizarDisponibilidad']);
+
+    // CRUD Comentarios
+    Route::post('/comentario-lugar-turistico', [ComentarioController::class,'store']);
     
 });
 
@@ -80,3 +85,5 @@ Route::get('/lugares-recomendar-sidebar', [InformacionLugarController::class, 'o
 
 Route::get('/lugares-caterigoria', [InformacionLugarController::class, 'obtenerLugaresCategoria']);
 Route::get('/lugares-filtro', [InformacionLugarController::class, 'obtenerLugaresFiltro']);
+
+Route::get('/info-comentario', [ComentarioController::class, 'index']);
