@@ -30,7 +30,8 @@ class RegistroUsuarioRequest extends FormRequest
             'password'=>[
                 'required',
                 'confirmed',
-            ]
+            ],
+            'rol' => ['required','between:1,2']
         ];
     }
     public function messages(){
@@ -42,6 +43,8 @@ class RegistroUsuarioRequest extends FormRequest
             'email.unique' => 'El usuario ya esta registrado',
             'password.required' => 'El password es obligatorio',
             'password.confirmed' => 'El password es obligatorio',
+            'rol.required' => 'El rol de usuario es obligatorio',
+            'rol.between' => 'El rol es incorrecto'
         ];
     }
 }

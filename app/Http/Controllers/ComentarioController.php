@@ -41,6 +41,82 @@ class ComentarioController extends Controller
             ];
         }
     }
+
+    public function update(ComentarioRequest $request, $id){
+        $data = $request->validated();
+        $autenticado = Auth::user();
+
+        if($data['user_id'] == $autenticado->id){
+
+            $comentario = Comentario::findOrFail($id);
+
+            if($comentario){
+
+                $respuesta = $comentario->update($data);
+
+                if($respuesta){
+
+                    return [
+                        'valido'=>true,
+                        'comentario'=> $comentario
+                    ];
+                }else{
+                    return [
+                        'valido'=>false
+                    ]; 
+                }
+            }else{
+                return [
+                    'valido'=>false
+                ];
+            }
+        }else{
+            return [
+                'valido'=>false
+            ];
+        }
+    }
+
+    public function delete(Request $request){
+        
+        $autenticado = Auth::user();
+        if($autenticado){
+            $comentario = Comentario::findOrFail($request->id);
+
+        if($comentario){
+            
+            if ($autenticado->id == $comentario->user_id) {
+                
+                $eliminado = $comentario->delete();
+
+                if($eliminado){
+                    return [
+                        'valido' => true,
+                        'comentario' => $comentario->id
+                    ];
+                }else{
+                    return [
+                        'valido' => false
+                    ];
+                }
+
+                }else{
+                    return [
+                        'valido' => false
+                    ];
+                }
+            }else{
+                return [
+                    'valido' => false
+                ];
+            }
+        }else{
+            return [
+                'valido' => false
+            ];
+        }
+    }
+
     public function index(Request $request){
         $url = $request->url;
 
@@ -73,5 +149,31 @@ class ComentarioController extends Controller
                 'valido'=>false
             ];
         }
+    }
+
+    public function obtenerPorUsuario(){
+        
+        $autenticado = Auth::user();
+
+        if($autenticado){
+            
+            $comentarios = Comentario::where('user_id', $autenticado->id)->get();
+            
+            if($comentarios){
+                return [
+                    'valido' => true,
+                    'comentarios' => $comentarios
+                ];
+            }else{
+                return [
+                    'valido' => false
+                ];
+            }
+        }else{
+            return [
+                'valido' => false
+            ];
+        }
+        
     }
 }

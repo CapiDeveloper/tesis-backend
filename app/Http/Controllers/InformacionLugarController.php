@@ -142,4 +142,21 @@ class InformacionLugarController extends Controller
             ];
         }
     }
+
+    public function obtenerCategorias(Request $request) {
+
+        $categorias = Tipo::all();
+        
+        if($categorias){
+
+            return [
+                'valido' => true,
+                'categorias'=> $categorias
+            ];
+        }else{
+            return [
+                'valido' => false,
+            ];
+        }
+    }
 }

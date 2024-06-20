@@ -27,7 +27,7 @@ class UserController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
             'imagen' => '',
-            'rol' => 1,
+            'rol' => $data['rol'],
             'verification_token' => Str::random(60) // Generar y guardar el token de verificación
         ]);
 

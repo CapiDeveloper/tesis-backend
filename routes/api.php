@@ -65,6 +65,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
 
     // CRUD Comentarios
     Route::post('/comentario-lugar-turistico', [ComentarioController::class,'store']);
+    Route::delete('/comentario-lugar-turistico-eliminar', [ComentarioController::class,'delete']);
+    Route::put('/comentario-lugar-turistico-actualizar/{id}', [ComentarioController::class,'update']);
+    Route::get('/comentarios-usuario', [ComentarioController::class, 'obtenerPorUsuario']);
     
 });
 
@@ -85,5 +88,6 @@ Route::get('/lugares-recomendar-sidebar', [InformacionLugarController::class, 'o
 
 Route::get('/lugares-caterigoria', [InformacionLugarController::class, 'obtenerLugaresCategoria']);
 Route::get('/lugares-filtro', [InformacionLugarController::class, 'obtenerLugaresFiltro']);
+Route::get('/categorias-lugares', [InformacionLugarController::class, 'obtenerCategorias']);
 
 Route::get('/info-comentario', [ComentarioController::class, 'index']);
