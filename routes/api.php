@@ -78,7 +78,7 @@ Route::post('/verificar-email/{token}', [VerificacionController::class, 'verific
 Route::post('/olvidar-clave', [OlvidarClaveController::class, 'enviarEmail']);
 Route::post('/restablecer-clave', [RestablecerClaveController::class, 'restablecer']);
 
-// Cuentas de popos
+// APIS Luagar turisticos
 Route::get('/info-lugar', [InformacionLugarController::class, 'obtenerLugar']);
 Route::get('/info-horario', [InformacionLugarController::class, 'obtenerHorario']);
 Route::get('/info-producto', [InformacionLugarController::class, 'obtenerProducto']);
@@ -87,7 +87,8 @@ Route::get('/info-servicio', [InformacionLugarController::class, 'obtenerServici
 Route::get('/lugares-recomendar-sidebar', [InformacionLugarController::class, 'obtenerLugaresSidebar']);
 
 Route::get('/lugares-caterigoria', [InformacionLugarController::class, 'obtenerLugaresCategoria']);
-Route::get('/lugares-filtro', [InformacionLugarController::class, 'obtenerLugaresFiltro']);
+Route::get('/lugares-filtro', [InformacionLugarController::class, 'obtenerLugaresFiltro']); // no utilizado
 Route::get('/categorias-lugares', [InformacionLugarController::class, 'obtenerCategorias']);
+Route::get('/lugares-populares', [InformacionLugarController::class, 'obtenerLugaresPopulares']); // Aun no utilizado
 
 Route::get('/info-comentario', [ComentarioController::class, 'index']);

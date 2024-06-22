@@ -129,14 +129,15 @@ class ComentarioController extends Controller
                 $comentarios = Comentario::with('user')
                 ->where('lugar_turistico_id', $lugar->id)
                 ->get();
-                if($comentarios){
+                if($comentarios->isEmpty()){
                     return [
                         'valido' => true,
                         'comentario' => ComentarioResource::collection($comentarios)
                     ];
                 }else{
                     return [
-                        'valido'=>false
+                        'valido'=>false,
+                        'array'=> $comentarios
                     ];
                 }
             }else{
@@ -159,7 +160,7 @@ class ComentarioController extends Controller
             
             $comentarios = Comentario::where('user_id', $autenticado->id)->get();
             
-            if($comentarios){
+            if($comentarios->isEmpty()){
                 return [
                     'valido' => true,
                     'comentarios' => $comentarios

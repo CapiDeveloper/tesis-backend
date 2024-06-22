@@ -88,7 +88,6 @@ class InformacionLugarController extends Controller
 
             $lugaresConUnaFoto = LugarTuristico::inRandomOrder()->limit(3)->get();
 
-
             $lugaresConUnaFoto->each(function ($lugar) {
                 $lugar->load(['fotos' => function($query) {
                     $query->take(1); 
@@ -99,7 +98,12 @@ class InformacionLugarController extends Controller
                 'valido' => true,
                 'lugaresSidebar'=> $lugaresConUnaFoto
             ];
+        }else{
+            return [
+                'valido' => false,
+            ];
         }
+
     }
 
     public function obtenerLugaresCategoria(Request $request) {
@@ -153,10 +157,32 @@ class InformacionLugarController extends Controller
                 'valido' => true,
                 'categorias'=> $categorias
             ];
+            
         }else{
             return [
                 'valido' => false,
             ];
         }
+    }
+
+    public function obtenerLugaresPopulares(Request $request) {
+
+        $lugaresConUnaFoto = LugarTuristico::with(['fotos' => function ($query) {
+            $query->take(1); // Cargar solo una foto
+        }, 'tipo'])
+        ->whereIn('id', [1, 2, 3]) // Aquí agregas los IDs específicos que quieres obtener
+        ->get();
+
+    if ($lugaresConUnaFoto->isEmpty()) {
+        return [
+            'valido' => false,
+        ];
+    }
+
+    return [
+        'valido' => true,
+        'lugaresSidebar' => $lugaresConUnaFoto
+    ];
+
     }
 }
