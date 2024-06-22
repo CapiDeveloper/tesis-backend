@@ -66,4 +66,9 @@ class LugarTuristico extends Model
         return $this->hasMany(Foto::class);
     }
 
+    public function ofertas()
+    {
+        return $this->hasMany(Oferta::class, 'lugar_turistico_id');
+    }
+
 }

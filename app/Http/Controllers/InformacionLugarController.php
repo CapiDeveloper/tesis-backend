@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\LugaresFiltroRequest;
+use App\Http\Resources\LugaresFiltroResource;
 use App\Models\LugarTuristico;
 use App\Models\Horario;
 use App\Models\Producto;
@@ -108,19 +109,30 @@ class InformacionLugarController extends Controller
 
     public function obtenerLugaresCategoria(Request $request) {
 
-        $tipo = Tipo::find($request->id);
+        $tipoNombre = $request->nombre;
+
+        if($tipoNombre){
+            $tipo = Tipo::where('nombre',$tipoNombre)->first();
+
+           if($tipo){
+                $lugaresPorTipo = LugarTuristico::with(['fotos' => function ($query) {
+                    $query->take(1);
+                }, 'tipo'])
+                ->where('tipo_id', $tipo->id)
+                ->get();
         
-        if($tipo){
-
-            $lugaresTuristicos = $tipo->lugares;
-
-            return [
-                'valido' => true,
-                'lugares'=> $lugaresTuristicos
-            ];
+                return [
+                    'valido'=>true,
+                    'lugaresPorTipo' => LugaresFiltroResource::collection($lugaresPorTipo)
+                ];
+           }else{
+                return [
+                    'valido'=>false,
+                ];
+           }
         }else{
             return [
-                'valido' => false,
+                'valido'=>false,
             ];
         }
     }
@@ -168,21 +180,44 @@ class InformacionLugarController extends Controller
     public function obtenerLugaresPopulares(Request $request) {
 
         $lugaresConUnaFoto = LugarTuristico::with(['fotos' => function ($query) {
-            $query->take(1); // Cargar solo una foto
+            $query->take(1);
         }, 'tipo'])
-        ->whereIn('id', [1, 2, 3]) // Aquí agregas los IDs específicos que quieres obtener
+        ->whereIn('id', [20])
         ->get();
 
-    if ($lugaresConUnaFoto->isEmpty()) {
+        if ($lugaresConUnaFoto->isEmpty()) {
+            return [
+                'valido' => false,
+            ];
+        }
+
         return [
-            'valido' => false,
+            'valido' => true,
+            'lugaresPopulares' => LugaresFiltroResource::collection($lugaresConUnaFoto)
         ];
-    }
-
-    return [
-        'valido' => true,
-        'lugaresSidebar' => $lugaresConUnaFoto
-    ];
 
     }
+    public function obtenerLugaresOfertas(){
+        
+        $lugaresRelacionados = LugarTuristico::whereHas('ofertas')
+            ->with(['ofertas', 'fotos' => function ($query) {
+                $query->take(1);
+            }, 'tipo'])
+            ->limit(3)
+            ->get();
+
+        if($lugaresRelacionados){
+            return [
+                'valido'=>true,
+                'LugaresOfertas' => LugaresFiltroResource::collection($lugaresRelacionados)
+            ];
+        }else{
+            return [
+                'valido'=>false,
+                'LugaresOfertas' => $lugaresRelacionados
+            ];
+        }
+
+    }
+
 }

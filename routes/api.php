@@ -89,6 +89,7 @@ Route::get('/lugares-recomendar-sidebar', [InformacionLugarController::class, 'o
 Route::get('/lugares-caterigoria', [InformacionLugarController::class, 'obtenerLugaresCategoria']);
 Route::get('/lugares-filtro', [InformacionLugarController::class, 'obtenerLugaresFiltro']); // no utilizado
 Route::get('/categorias-lugares', [InformacionLugarController::class, 'obtenerCategorias']);
-Route::get('/lugares-populares', [InformacionLugarController::class, 'obtenerLugaresPopulares']); // Aun no utilizado
+Route::get('/lugares-populares', [InformacionLugarController::class, 'obtenerLugaresPopulares']);
+Route::get('/lugares-ofertas', [InformacionLugarController::class, 'obtenerLugaresOfertas']);
 
 Route::get('/info-comentario', [ComentarioController::class, 'index']);

@@ -17,4 +17,9 @@ class Oferta extends Model
         'finaliza',
         'lugar_turistico_id',
     ];
+
+    public function lugarTuristico()
+    {
+        return $this->belongsTo(LugarTuristico::class, 'lugar_turistico_id');
+    }
 }
