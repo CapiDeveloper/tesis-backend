@@ -143,13 +143,18 @@ class InformacionLugarController extends Controller
         
         if($data){
 
-            $lugaresTuristicos = LugarTuristico::where('nombre', 'like', "%{$data['busqueda']}%")
-        ->orWhere('descripcion', 'like', "%{$data['busqueda']}%")
-        ->get();
+            $lugaresTuristicos = LugarTuristico::with(['fotos' => function ($query) {
+                $query->take(1);
+            }, 'tipo'])
+            ->where(function ($query) use ($data) {
+                $query->where('nombre', 'like', "%{$data['busqueda']}%")
+                      ->orWhere('descripcion', 'like', "%{$data['busqueda']}%");
+            })
+            ->get();
 
             return [
                 'valido' => true,
-                'lugares'=> $lugaresTuristicos
+                'lugares'=> LugaresFiltroResource::collection($lugaresTuristicos)
             ];
         }else{
 
