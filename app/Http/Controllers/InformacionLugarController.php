@@ -149,10 +149,12 @@ class InformacionLugarController extends Controller
             })
             ->get();
 
-            return [
-                'valido' => true,
-                'lugares'=> LugaresFiltroResource::collection($lugaresTuristicos)
-            ];
+            if($lugaresTuristicos->empty()){
+                return [
+                    'valido' => true,
+                    'lugares'=> LugaresFiltroResource::collection($lugaresTuristicos)
+                ];
+            }
         }else{
 
             return [
@@ -184,7 +186,7 @@ class InformacionLugarController extends Controller
         $lugaresConUnaFoto = LugarTuristico::with(['fotos' => function ($query) {
             $query->take(1);
         }, 'tipo'])
-        ->whereIn('id', [20])
+        ->whereIn('id', [20]) // agregar 3 id en total
         ->get();
 
         if ($lugaresConUnaFoto->isEmpty()) {

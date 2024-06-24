@@ -73,7 +73,12 @@ class UserController extends Controller
     }
 
     public function obtenerUsuarios(){
-        $usuarios = User::all();
+
+        $usuarios = User::where(function($query) {
+            $query->where('rol', 0)
+                  ->orWhere('rol', 1);
+        })->get();
+        
         return [
             'valido'=>true,
             'usuarios'=> UserResource::collection($usuarios)
