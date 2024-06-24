@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LugaresFiltroRequest;
 use App\Http\Resources\LugaresFiltroResource;
+use App\Http\Resources\LugaresMapaResource;
 use App\Models\LugarTuristico;
 use App\Models\Horario;
 use App\Models\Producto;
@@ -83,10 +84,6 @@ class InformacionLugarController extends Controller
 
     public function obtenerLugaresSidebar(Request $request) {
 
-        $lugar = LugarTuristico::where('url',$request->url)->first();
-        
-        if($lugar){
-
             $lugaresConUnaFoto = LugarTuristico::inRandomOrder()->limit(3)->get();
 
             $lugaresConUnaFoto->each(function ($lugar) {
@@ -95,16 +92,16 @@ class InformacionLugarController extends Controller
                 }]);
             });
 
-            return [
-                'valido' => true,
-                'lugaresSidebar'=> $lugaresConUnaFoto
-            ];
-        }else{
-            return [
-                'valido' => false,
-            ];
-        }
-
+            if($lugaresConUnaFoto){
+                return [
+                    'valido' => true,
+                    'lugaresSidebar'=> $lugaresConUnaFoto
+                ];
+            }else{
+                return [
+                    'valido' => false,
+                ];
+            }
     }
 
     public function obtenerLugaresCategoria(Request $request) {
@@ -223,6 +220,14 @@ class InformacionLugarController extends Controller
             ];
         }
 
+    }
+
+    public function lugaresMapa(){
+        $lugares = LugarTuristico::all();
+        return [
+            'valido' => true,
+            'lugares' => LugaresMapaResource::collection($lugares)
+        ];
     }
 
 }
