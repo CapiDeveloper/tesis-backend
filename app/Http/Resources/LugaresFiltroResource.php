@@ -14,11 +14,7 @@ class LugaresFiltroResource extends JsonResource
             'nombre' => $this->nombre,
             'url' => $this->url,
             'descripcion' => $this->descripcion,
-            'fotos' => $this->fotos->map(function ($foto) {
-                return [
-                    'url' => $foto->url,
-                ];
-            }),
+            'logo' => $this->logo,
             'tipo' => [
                 'nombre' => $this->tipo->nombre,
             ],

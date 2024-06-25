@@ -86,16 +86,10 @@ class InformacionLugarController extends Controller
 
             $lugaresConUnaFoto = LugarTuristico::inRandomOrder()->limit(3)->get();
 
-            $lugaresConUnaFoto->each(function ($lugar) {
-                $lugar->load(['fotos' => function($query) {
-                    $query->take(1); 
-                }]);
-            });
-
             if($lugaresConUnaFoto){
                 return [
                     'valido' => true,
-                    'lugaresSidebar'=> $lugaresConUnaFoto
+                    'lugaresSidebar'=> LugaresFiltroResource::collection($lugaresConUnaFoto)
                 ];
             }else{
                 return [
@@ -112,9 +106,7 @@ class InformacionLugarController extends Controller
             $tipo = Tipo::where('nombre',$tipoNombre)->first();
 
            if($tipo){
-                $lugaresPorTipo = LugarTuristico::with(['fotos' => function ($query) {
-                    $query->take(1);
-                }, 'tipo'])
+                $lugaresPorTipo = LugarTuristico::with('tipo')
                 ->where('tipo_id', $tipo->id)
                 ->get();
         
@@ -140,9 +132,7 @@ class InformacionLugarController extends Controller
         
         if($data){
 
-            $lugaresTuristicos = LugarTuristico::with(['fotos' => function ($query) {
-                $query->take(1);
-            }, 'tipo'])
+            $lugaresTuristicos = LugarTuristico::with('tipo')
             ->where(function ($query) use ($data) {
                 $query->where('nombre', 'like', "%{$data['busqueda']}%")
                       ->orWhere('descripcion', 'like', "%{$data['busqueda']}%");
@@ -183,10 +173,8 @@ class InformacionLugarController extends Controller
 
     public function obtenerLugaresPopulares(Request $request) {
 
-        $lugaresConUnaFoto = LugarTuristico::with(['fotos' => function ($query) {
-            $query->take(1);
-        }, 'tipo'])
-        ->whereIn('id', [20]) // agregar 3 id en total
+        $lugaresConUnaFoto = LugarTuristico::with('tipo')
+        ->whereIn('id', [20,21,22])
         ->get();
 
         if ($lugaresConUnaFoto->isEmpty()) {
@@ -204,9 +192,7 @@ class InformacionLugarController extends Controller
     public function obtenerLugaresOfertas(){
         
         $lugaresRelacionados = LugarTuristico::whereHas('ofertas')
-            ->with(['ofertas', 'fotos' => function ($query) {
-                $query->take(1);
-            }, 'tipo'])
+            ->with('ofertas')
             ->limit(3)
             ->get();
 
