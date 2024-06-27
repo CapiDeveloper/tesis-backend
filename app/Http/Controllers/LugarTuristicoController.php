@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\LugarTuristicoRequest;
 use App\Models\LugarTuristico;
+use App\Models\EventLog;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,10 +30,24 @@ class LugarTuristicoController extends Controller
 
                 $lugares = LugarTuristico::where('user_id',$user->id)->get();
                 if($lugares){
-                    return [
-                        'valido'=>true,
-                        'lugaresTuristicos'=> $lugares
-                    ];    
+
+
+                    $evento =  EventLog::create([
+                        'user_id' => Auth::id(),
+                        'event_type' => 'view_place',
+                        'details' => json_encode(['place_id' => $id])
+                    ]);
+
+                    if($evento){
+                        return [
+                            'valido'=>true,
+                            'lugaresTuristicos'=> $lugares
+                        ];
+                    }else{
+                        return [
+                            'valido'=>false,
+                        ];
+                    }
                 }else{
                     return [
                         'valido'=>false
@@ -56,7 +71,7 @@ class LugarTuristicoController extends Controller
         $nombreOriginal = $_FILES['logo']['name'];
 
         // Procesar y guardar la imagen
-        $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,200,200);
+        $nombreImg = ImageService::procesarYGuardar($imagenTemporal, $nombreOriginal,300,300);
     
 
         $lugar = LugarTuristico::create([
@@ -73,10 +88,22 @@ class LugarTuristicoController extends Controller
             'tipo_id' => $data['tipo_id'],
         ]);
 
-        return [
-            'valido'=> true,
-            'image'=>$lugar
-        ];
+        $evento =  EventLog::create([
+            'user_id' => Auth::id(),
+            'event_type' => 'crear-lugar',
+            'details' => json_encode(['place_id' => $id])
+        ]);
+
+        if($evento){
+            return [
+                'valido'=> true,
+                'image'=>$lugar
+            ];
+        }else{
+            return [
+                'valido'=>false,
+            ];    
+        }
     }else{
         return [
             'valido'=>false,
@@ -120,12 +147,24 @@ class LugarTuristicoController extends Controller
             $lugarTuristico->url = LugarTuristico::generateUrl($data['nombre']);
             $lugarTuristico->update($data);
 
-            return [
-                'valido' => true,
-            ];
+            $evento =  EventLog::create([
+                'user_id' => Auth::id(),
+                'event_type' => 'actualizar-lugar',
+                'details' => json_encode(['place_id' => $id])
+            ]);
+    
+            if($evento){
+                return [
+                    'valido' => true,
+                ];
+            }else{
+                return [
+                    'valido'=>false,
+                ];
+            }
         }else{
             return [
-                'valido'=>true,
+                'valido'=>false,
             ];    
         }
     }
@@ -145,9 +184,22 @@ class LugarTuristicoController extends Controller
 
             
             if($eliminado){
-                return [
-                    'valido'=>$id
-                ];
+
+                $evento =  EventLog::create([
+                    'user_id' => Auth::id(),
+                    'event_type' => 'eliminar-lugar',
+                    'details' => json_encode(['place_id' => $id])
+                ]);
+        
+                if($evento){
+                    return [
+                        'valido'=>$id
+                    ];
+                }else{
+                    return [
+                        'valido'=>false
+                    ];
+                }
             }
             return [
                 'valido'=>false

@@ -21,7 +21,7 @@ use App\Http\Controllers\ProductoImagenController;
 use App\Http\Controllers\DisponibilidadProductoController;
 use App\Http\Controllers\InformacionLugarController;
 use App\Http\Controllers\ComentarioController;
-
+use App\Http\Controllers\AnalyticsController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     
@@ -68,6 +68,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function(){
     Route::delete('/comentario-lugar-turistico-eliminar', [ComentarioController::class,'delete']);
     Route::put('/comentario-lugar-turistico-actualizar/{id}', [ComentarioController::class,'update']);
     Route::get('/comentarios-usuario', [ComentarioController::class, 'obtenerPorUsuario']);
+
+    // Analiticas
+    Route::get('/analiticas', [AnalyticsController::class, 'index']);
     
 });
 
@@ -92,5 +95,6 @@ Route::get('/categorias-lugares', [InformacionLugarController::class, 'obtenerCa
 Route::get('/lugares-populares', [InformacionLugarController::class, 'obtenerLugaresPopulares']);
 Route::get('/lugares-ofertas', [InformacionLugarController::class, 'obtenerLugaresOfertas']);
 Route::get('/lugares-mapa', [InformacionLugarController::class, 'lugaresMapa']);
+Route::get('/lugares-lista-ofertas', [InformacionLugarController::class, 'obtenerOfertasLugar']);
 
 Route::get('/info-comentario', [ComentarioController::class, 'index']);

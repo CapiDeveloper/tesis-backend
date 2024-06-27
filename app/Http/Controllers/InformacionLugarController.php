@@ -6,19 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LugaresFiltroRequest;
 use App\Http\Resources\LugaresFiltroResource;
 use App\Http\Resources\LugaresMapaResource;
+use App\Http\Resources\OfertasLugarResource;
 use App\Models\LugarTuristico;
 use App\Models\Horario;
 use App\Models\Producto;
 use App\Models\Foto;
 use App\Models\Servicio;
 use App\Models\Tipo;
+use App\Models\Oferta;
+use App\Models\EventLog;
 
 class InformacionLugarController extends Controller
 {
     public function obtenerLugar(Request $request) {
 
         $lugar = LugarTuristico::with('tipo')->where('url',$request->url)->first();
-        
+
         if($lugar){
             return [
                 'valido' => true,
@@ -51,6 +54,19 @@ class InformacionLugarController extends Controller
             return [
                 'valido' => true,
                 'producto'=> $productos
+            ];
+        }
+    }
+
+    public function obtenerOfertasLugar(Request $request) {
+
+        $lugar = LugarTuristico::where('url',$request->url)->first();
+        
+        if($lugar){
+            $ofertas = Oferta::where('lugar_turistico_id', $lugar->id)->get();
+            return [
+                'valido' => true,
+                'oferta'=> OfertasLugarResource::collection($ofertas)
             ];
         }
     }

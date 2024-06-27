@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\RegistroUsuarioRequest;
 use App\Models\User;
+use App\Models\EventLog;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use App\Mail\VerificarCuentaMailable;
@@ -31,15 +32,33 @@ class UserController extends Controller
             'verification_token' => Str::random(60) // Generar y guardar el token de verificación
         ]);
 
-        // Generar la URL de verificación
-        $verificationUrl = $user->verification_token;
+        if($user){
+            // Generar la URL de verificación
+            $verificationUrl = $user->verification_token;
 
-        // Enviar el correo electrónico con la URL de verificación
-        Mail::to($user->email)->send(new VerificarCuentaMailable($verificationUrl));
+            // Enviar el correo electrónico con la URL de verificación
+            Mail::to($user->email)->send(new VerificarCuentaMailable($verificationUrl));
 
-        return [
-            'user' => true
-        ];
+            $evento =  EventLog::create([
+                'user_id' => Auth::id(),
+                'event_type' => 'crear-usuario',
+                'details' => json_encode(['place_id' => $id])
+            ]);
+
+            if($evento){
+                return [
+                    'user' => true
+                ];
+            }else{
+                return [
+                    'valido' => false
+                ];
+            }
+        }else{
+            return [
+                'valido' => false
+            ];  
+        }
     }
 
     public function actualizar(Request $request){
@@ -54,10 +73,23 @@ class UserController extends Controller
             $guardar =  $usuario->save();
 
             if($guardar){
-                return [
-                    'usuario' => $usuario,
-                    'valido' => true
-                ];    
+
+                $evento =  EventLog::create([
+                    'user_id' => Auth::id(),
+                    'event_type' => 'actualizar-usuario',
+                    'details' => json_encode(['place_id' => $id])
+                ]);
+    
+                if($evento){
+                    return [
+                        'usuario' => $usuario,
+                        'valido' => true
+                    ];
+                }else{
+                    return [
+                        'valido' => false
+                    ];
+                }    
             }else{
                 return [
                     'valido' => false

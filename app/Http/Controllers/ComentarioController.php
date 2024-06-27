@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ComentarioRequest;
 use App\Models\Comentario;
 use App\Models\LugarTuristico;
+use App\Models\EventLog;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ComentarioResource;
 
@@ -26,10 +27,23 @@ class ComentarioController extends Controller
 
             if($comentario){
                 $comentario->load('user');
-                return [
-                    'valido'=>true,
-                    'comentario'=> new ComentarioResource($comentario)
-                ];
+
+                $evento =  EventLog::create([
+                    'user_id' => Auth::id(),
+                    'event_type' => 'crear-comentario',
+                    'details' => json_encode(['place_id' => $id])
+                ]);
+
+                if($evento){
+                    return [
+                        'valido'=>true,
+                        'comentario'=> new ComentarioResource($comentario)
+                    ];
+                }else{
+                    return [
+                        'valido'=>false
+                    ];
+                }
             }else{
                 return [
                     'valido'=>false
@@ -56,10 +70,22 @@ class ComentarioController extends Controller
 
                 if($respuesta){
 
-                    return [
-                        'valido'=>true,
-                        'comentario'=> $comentario
-                    ];
+                    $evento =  EventLog::create([
+                        'user_id' => Auth::id(),
+                        'event_type' => 'actualizar-comentario',
+                        'details' => json_encode(['place_id' => $id])
+                    ]);
+    
+                    if($evento){
+                        return [
+                            'valido'=>true,
+                            'comentario'=> $comentario
+                        ];
+                    }else{
+                        return [
+                            'valido'=>false,
+                        ];
+                    }
                 }else{
                     return [
                         'valido'=>false
@@ -90,10 +116,23 @@ class ComentarioController extends Controller
                 $eliminado = $comentario->delete();
 
                 if($eliminado){
-                    return [
-                        'valido' => true,
-                        'comentario' => $comentario->id
-                    ];
+
+                    $evento =  EventLog::create([
+                        'user_id' => Auth::id(),
+                        'event_type' => 'eliminar-comentario',
+                        'details' => json_encode(['place_id' => $id])
+                    ]);
+    
+                    if($evento){
+                        return [
+                            'valido' => true,
+                            'comentario' => $comentario->id
+                        ];
+                    }else{
+                        return [
+                            'valido' => false
+                        ];
+                    }
                 }else{
                     return [
                         'valido' => false

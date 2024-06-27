@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\ImageService;
 use App\Models\Producto;
 use App\Models\User;
+use App\Models\EventLog;
 
 
 class ProductoController extends Controller
@@ -51,10 +52,23 @@ class ProductoController extends Controller
             $productoRetornar = Producto::with('categoria')->findOrFail($producto->id);
 
                 if($productoRetornar->id){
-                    return [
-                        'valido'=> true,
-                        'producto'=>$productoRetornar
-                    ];
+
+                    $evento =  EventLog::create([
+                        'user_id' => Auth::id(),
+                        'event_type' => 'crear-producto',
+                        'details' => json_encode(['place_id' => $producto->id])
+                    ]);
+    
+                    if($evento){
+                        return [
+                            'valido'=> true,
+                            'producto'=>$productoRetornar
+                        ];
+                    }else{
+                        return [
+                            'valido'=> false
+                        ];
+                    }
                 }else{
                         return [
                     'valido'=> false
@@ -80,10 +94,23 @@ class ProductoController extends Controller
             $respuesta = $producto->update($data);
 
             if ($respuesta) {
-                return[
-                    'valido' => true,
-                    'producto'=>$producto
-                ];    
+
+                $evento =  EventLog::create([
+                    'user_id' => Auth::id(),
+                    'event_type' => 'actualizar-producto',
+                    'details' => json_encode(['place_id' => $id])
+                ]);
+
+                if($evento){
+                    return[
+                        'valido' => true,
+                        'producto'=>$producto
+                    ];  
+                }else{
+                    return[
+                        'valido' => false
+                    ];
+                }  
             }else{
                 return[
                     'valido' => false
@@ -107,9 +134,22 @@ class ProductoController extends Controller
         $eliminado = $producto->delete();
         
         if($eliminado){
-            return [
-                'valido'=>$producto->id
-            ];
+
+            $evento =  EventLog::create([
+                'user_id' => Auth::id(),
+                'event_type' => 'eliminar-producto',
+                'details' => json_encode(['place_id' => $id])
+            ]);
+
+            if($evento){
+                return [
+                    'valido'=>$producto->id
+                ];
+            }else{
+                return [
+                    'valido'=>false
+                ];
+            }
         }
         return [
             'valido'=>false
