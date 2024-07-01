@@ -31,7 +31,7 @@ class ComentarioController extends Controller
                 $evento =  EventLog::create([
                     'user_id' => Auth::id(),
                     'event_type' => 'crear-comentario',
-                    'details' => json_encode(['place_id' => $id])
+                    'details' => json_encode(['place_id' => $comentario->id])
                 ]);
 
                 if($evento){
@@ -73,7 +73,7 @@ class ComentarioController extends Controller
                     $evento =  EventLog::create([
                         'user_id' => Auth::id(),
                         'event_type' => 'actualizar-comentario',
-                        'details' => json_encode(['place_id' => $id])
+                        'details' => json_encode(['place_id' => $comentario->id])
                     ]);
     
                     if($evento){
@@ -120,7 +120,7 @@ class ComentarioController extends Controller
                     $evento =  EventLog::create([
                         'user_id' => Auth::id(),
                         'event_type' => 'eliminar-comentario',
-                        'details' => json_encode(['place_id' => $id])
+                        'details' => json_encode(['place_id' => $comentario->id])
                     ]);
     
                     if($evento){

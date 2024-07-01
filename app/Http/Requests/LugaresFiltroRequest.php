@@ -15,15 +15,13 @@ class LugaresFiltroRequest extends FormRequest
     public function rules()
     {
         return [
-            'busqueda' => 'required|string|max:30',
+            'busqueda' => 'required',
         ];
     }
 
     public function messages(){
         return [
             'busqueda.required' => 'El inicio es obligatorio',
-            'busqueda.string' => 'El finaliza es obligatorio',
-            'busqueda.max' => 'El precio debe ser un número',
         ];
     }
 }

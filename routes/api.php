@@ -23,7 +23,7 @@ use App\Http\Controllers\InformacionLugarController;
 use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\AnalyticsController;
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function(){
+Route::middleware(['auth:sanctum','verified'])->group(function(){
     
     // Usuarios
     Route::get('/usuario', function (Request $request){

@@ -25,10 +25,10 @@ class OfertaRequest extends FormRequest
 
     public function messages(){
         return [
-            'titulo.required' => 'El inicio es obligatorio',
+            'titulo.required' => 'El titulo es obligatorio',
             'descripcion.required' => 'La descripción es obligatorio',
-            'inicia.required' => 'El inicio es obligatorio',
-            'inicia.date_format' => 'El inicio es incorrecto',
+            'inicia.required' => 'El fecha de inicio es obligatorio',
+            'inicia.date_format' => 'El formato de fecha es incorrecto',
             'finaliza.required' => 'El finaliza es obligatorio',
             'finaliza.date_format' => 'El finaliza es incorrecto',
             'lugar_turistico_id.required' => 'El lugar turistico es obligatorio',
