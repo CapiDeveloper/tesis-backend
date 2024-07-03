@@ -42,7 +42,7 @@ class UserController extends Controller
             $evento =  EventLog::create([
                 'user_id' => Auth::id(),
                 'event_type' => 'crear-usuario',
-                'details' => json_encode(['place_id' => $id])
+                'details' => json_encode(['place_id' => $user->id])
             ]);
 
             if($evento){
@@ -77,7 +77,7 @@ class UserController extends Controller
                 $evento =  EventLog::create([
                     'user_id' => Auth::id(),
                     'event_type' => 'actualizar-usuario',
-                    'details' => json_encode(['place_id' => $id])
+                    'details' => json_encode(['place_id' => $usuario->id])
                 ]);
     
                 if($evento){

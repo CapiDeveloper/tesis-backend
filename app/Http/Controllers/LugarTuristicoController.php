@@ -91,7 +91,7 @@ class LugarTuristicoController extends Controller
         $evento =  EventLog::create([
             'user_id' => Auth::id(),
             'event_type' => 'crear-lugar',
-            'details' => json_encode(['place_id' => $id])
+            'details' => json_encode(['place_id' => $lugar->id])
         ]);
 
         if($evento){
@@ -150,7 +150,7 @@ class LugarTuristicoController extends Controller
             $evento =  EventLog::create([
                 'user_id' => Auth::id(),
                 'event_type' => 'actualizar-lugar',
-                'details' => json_encode(['place_id' => $id])
+                'details' => json_encode(['place_id' => $lugarTuristico->id])
             ]);
     
             if($evento){
